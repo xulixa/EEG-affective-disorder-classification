@@ -37,6 +37,21 @@ The notebooks therefore contain the experimental pipeline and model implementati
 
 ## EEG Representations
 
+### Dataset Generation
+
+The `dipl_datasetovi.ipynb` notebook contains the preprocessing and dataset generation pipeline used to create the image-based datasets from the original EEG recordings.
+
+The notebook generates the different representations used in the CNN experiments, including:
+
+- Power Spectral Density (PSD) representations
+- Spectrograms
+- EEG topographic scalp maps
+- Segmented versions of the corresponding representations
+
+For segmented datasets, each participant's EEG recording is divided into five segments. The generated images are organized according to participant and representation, allowing the CNN notebooks to load the corresponding images for model training and evaluation.
+
+The original EEG recordings and generated image datasets are not included in the repository due to their size and data availability restrictions.
+
 ### Power Spectral Density
 
 Welch's method is used to estimate the power spectral density of the EEG signals. PSD representations are used as inputs to the CNN models.
@@ -99,6 +114,7 @@ Detailed results, evaluation metrics, and visualizations are available in the co
 EEG-affective-disorder-classification/
 │
 ├── notebooks/
+│   ├── dipl_datasetovi.ipynb
 │   ├── CNN_PS.ipynb
 │   ├── CNN_PS_5seg.ipynb
 │   ├── CNN_spektrogram.ipynb
