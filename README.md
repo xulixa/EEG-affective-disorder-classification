@@ -119,6 +119,7 @@ The results indicate that spatial information represented through scalp topograp
 
 Detailed training results, evaluation metrics, and visualizations are available in the corresponding Jupyter notebooks.
 
+```markdown
 ## Repository Structure
 
 ```text
@@ -139,6 +140,7 @@ EEG-affective-disorder-classification/
 ├── .gitignore
 ├── README.md
 └── requirements.txt
+´´´´
 
 ## Technologies
 
