@@ -102,11 +102,22 @@ The main training configuration includes:
 
 ## Results
 
-The experiments compare the performance of CNN classifiers using different EEG representations.
+The CNN models were evaluated using six different experimental setups combining three EEG representations with two segmentation strategies.
 
-Among the investigated representations, PSD-based representations achieved strong classification performance, while the topographic representation with segmented inputs also showed promising results.
+| EEG representation | Segmentation | Accuracy | F1-score |
+|---|---|---:|---:|
+| Power Spectral Density (PSD) | No | 67.86% | 66.67% |
+| Power Spectral Density (PSD) | 5 segments | 66.43% | 71.17% |
+| Spectrogram | No | 67.86% | 64.00% |
+| Spectrogram | 5 segments | 71.43% | 72.60% |
+| EEG topographic maps | No | 85.71% | 88.89% |
+| EEG topographic maps | 5 segments | **88.57%** | **89.47%** |
 
-Detailed results, evaluation metrics, and visualizations are available in the corresponding Jupyter notebooks.
+The best performance was achieved using segmented EEG topographic maps, reaching an accuracy of **88.57%** and an F1-score of **89.47%**.
+
+The results indicate that spatial information represented through scalp topographies was particularly informative for the classification task. Segmenting the recordings into five temporal segments further improved the performance of the topographic representation.
+
+Detailed training results, evaluation metrics, and visualizations are available in the corresponding Jupyter notebooks.
 
 ## Repository Structure
 
@@ -122,10 +133,12 @@ EEG-affective-disorder-classification/
 │   ├── CNN_topomap.ipynb
 │   └── CNN_topomap_5seg.ipynb
 │
+├── data/
+│   └── README.md
+│
 ├── .gitignore
 ├── README.md
-└── …
-```
+└── requirements.txt
 
 ## Technologies
 
