@@ -109,3 +109,29 @@ EEG-affective-disorder-classification/
 ├── .gitignore
 ├── README.md
 └── ...
+
+## Technologies
+
+Python
+PyTorch
+torchvision
+MNE-Python
+SciPy
+NumPy
+pandas
+scikit-learn
+Matplotlib
+
+## Reproducibility
+
+The notebooks contain the CNN training and evaluation workflow used in the experiments.
+
+Because the original EEG dataset and derived image datasets are not included in this repository, the data must be obtained separately and the corresponding files must be placed in a local data/ directory.
+
+The notebooks use relative paths to the project data/ directory rather than machine-specific absolute paths.
+
+## Academic Context
+
+This project was developed as part of a graduate thesis in Data Science at the University of Zagreb, Faculty of Electrical Engineering and Computing (FER).
+
+The project focuses on applying deep learning and image-based representations to EEG signal analysis for the classification of affective disorders.
