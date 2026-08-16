@@ -113,15 +113,15 @@ EEG-affective-disorder-classification/
 
 ## Technologies
 
-Python
-PyTorch
-torchvision
-MNE-Python
-SciPy
-NumPy
-pandas
-scikit-learn
-Matplotlib
+- Python
+- PyTorch
+- torchvision
+- MNE-Python
+- SciPy
+- NumPy
+- pandas
+- scikit-learn
+- Matplotlib
 
 ## Reproducibility
 
