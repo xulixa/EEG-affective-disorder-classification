@@ -26,4 +26,5 @@ Thumbs.db
 *.log
 
 # Large/local data
-data/
+data/*
+!data/README.md
