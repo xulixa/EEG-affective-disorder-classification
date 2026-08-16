@@ -1,128 +1,111 @@
-\# Classification of Affective Disorders from EEG Signals
+# Classification of Affective Disorders from EEG Signals
 
+This project investigates the classification of affective disorders from electroencephalography (EEG) signals using spectral and topographic representations combined with convolutional neural networks (CNNs).
 
+The goal is to distinguish between healthy individuals and individuals diagnosed with an affective disorder based on EEG-derived two-dimensional representations.
 
-\## Overview
+## Project Overview
 
+EEG signals are transformed into image-like representations that can be processed by convolutional neural networks. Several representations and segmentation strategies are investigated and compared.
 
+The experiments include:
 
-This project investigates the classification of affective disorders from electroencephalography (EEG) signals using power spectral representations and convolutional neural networks (CNNs).
+- Power Spectral Density (PSD)
+- Segmented Power Spectral Density
+- Spectrograms
+- Segmented spectrograms
+- EEG topographic scalp maps
+- Segmented EEG topographic scalp maps
 
+For segmented representations, each participant's recording is divided into five segments. Subject-level separation is maintained during dataset splitting to prevent data from the same participant from appearing in different subsets.
 
+## Dataset
 
-The goal is to distinguish between healthy individuals and individuals diagnosed with an affective disorder based on EEG-derived image representations.
+The dataset contains EEG recordings from 140 participants:
 
+- 70 healthy participants
+- 70 participants diagnosed with an affective disorder
 
+The classification task is binary:
 
-\## Methods
+- `0` — healthy
+- `1` — affective disorder
 
+The original EEG dataset and derived image datasets are not included in this repository.
 
+The notebooks therefore contain the experimental pipeline and model implementations, while the data paths must be configured locally according to the available dataset.
 
-The EEG signals are transformed into two-dimensional representations suitable for CNN-based classification, including:
+## EEG Representations
 
+### Power Spectral Density
 
+Welch's method is used to estimate the power spectral density of the EEG signals. PSD representations are used as inputs to the CNN models.
 
-\- Power Spectral Density (PSD)
+### Spectrograms
 
-\- Spectrograms
+Time-frequency representations are generated using spectrograms, allowing both temporal and frequency information to be represented in a two-dimensional form.
 
-\- Topographic scalp maps
+### Topographic Scalp Maps
 
+Spectral power is projected onto the scalp using EEG sensor locations. Five frequency bands are considered:
 
+- Delta: 0.5–4 Hz
+- Theta: 4–8 Hz
+- Alpha: 8–13 Hz
+- Beta: 13–30 Hz
+- Gamma: 30–45 Hz
 
-The project also investigates segmented EEG representations to increase the number of training samples while preserving subject-level separation between training and evaluation data.
-
-
-
-\## Model
-
-
+## Model
 
 A custom convolutional neural network is used for binary classification.
 
+The architecture consists of:
 
+- Three convolutional layers with progressively increasing feature dimensions
+- ReLU activations
+- Max-pooling
+- Adaptive/global feature aggregation
+- Fully connected classification layers
+- Dropout regularization
 
-The model consists of:
+For multi-image inputs, feature representations from five corresponding images are extracted and combined before the final classification stage.
 
+## Experimental Setup
 
+The experiments are implemented using Python and PyTorch.
 
-\- Three convolutional blocks
+The dataset is divided into training, validation, and test subsets while preserving subject-level separation. This prevents images originating from the same participant from being distributed across different subsets.
 
-\- ReLU activations
+The main training configuration includes:
 
-\- Max-pooling
+- Image size: depends on dataset
+- Batch size: 16 (8 in CNN_topomap_5seg)
+- Optimizer: Adam
+- Loss function: Cross-Entropy Loss
+- Training epochs: 30
+- Dropout: 0.5
 
-\- Adaptive/global feature aggregation
+## Results
 
-\- Fully connected classification layers
+The experiments compare the performance of CNN classifiers using different EEG representations.
 
-\- Dropout regularization
+Among the investigated representations, PSD-based representations achieved strong classification performance, while the topographic representation with segmented inputs also showed promising results.
 
+Detailed results, evaluation metrics, and visualizations are available in the corresponding Jupyter notebooks.
 
-
-\## Technologies
-
-
-
-\- Python
-
-\- PyTorch
-
-\- MNE-Python
-
-\- SciPy
-
-\- NumPy
-
-\- Matplotlib
-
-\- scikit-learn
-
-
-
-\## Dataset
-
-
-
-The dataset contains EEG recordings from healthy participants and participants diagnosed with an affective disorder.
-
-
-
-The original dataset contains 140 participants, with 70 participants per class.
-
-
-
-The dataset itself is not publicly available so it isn't included in this repository.
-
-
-
-\## Results
-
-
-
-Results and visualizations are provided in the `results/` directory.
-
-
-
-\## Project Structure
-
-
+## Repository Structure
 
 ```text
-
 EEG-affective-disorder-classification/
-
-├── src/
-
+│
 ├── notebooks/
-
-├── results/
-
-├── docs/
-
+│   ├── CNN_PS.ipynb
+│   ├── CNN_PS_5seg.ipynb
+│   ├── CNN_spektrogram.ipynb
+│   ├── CNN_spektrogram_5seg.ipynb
+│   ├── CNN_topomap.ipynb
+│   └── CNN_topomap_5seg.ipynb
+│
+├── .gitignore
 ├── README.md
-
-├── requirements.txt
-
-└── .gitignore
-
+└── ...
