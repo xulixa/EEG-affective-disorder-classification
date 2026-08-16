@@ -1,128 +1,167 @@
-\# Classification of Affective Disorders from EEG Signals
+# Classification of Affective Disorders from EEG Signals
 
+This project investigates the classification of affective disorders from electroencephalography (EEG) signals using spectral and topographic representations combined with convolutional neural networks (CNNs).
 
+The goal is to distinguish between healthy individuals and individuals diagnosed with an affective disorder based on EEG-derived two-dimensional representations.
 
-\## Overview
+## Project Overview
 
+EEG signals are transformed into image-like representations that can be processed by convolutional neural networks. Several representations and segmentation strategies are investigated and compared.
 
+The experiments include:
 
-This project investigates the classification of affective disorders from electroencephalography (EEG) signals using power spectral representations and convolutional neural networks (CNNs).
+- Power Spectral Density (PSD)
+- Segmented Power Spectral Density
+- Spectrograms
+- Segmented spectrograms
+- EEG topographic scalp maps
+- Segmented EEG topographic scalp maps
 
+For segmented representations, each participant's recording is divided into five segments. Subject-level separation is maintained during dataset splitting to prevent data from the same participant from appearing in different subsets.
 
+## Dataset
 
-The goal is to distinguish between healthy individuals and individuals diagnosed with an affective disorder based on EEG-derived image representations.
+The dataset contains EEG recordings from 140 participants:
 
+- 70 healthy participants
+- 70 participants diagnosed with an affective disorder
 
+The classification task is binary:
 
-\## Methods
+- `0` — healthy
+- `1` — affective disorder
 
+The original EEG dataset and derived image datasets are not included in this repository.
 
+The notebooks therefore contain the experimental pipeline and model implementations, while the data paths must be configured locally according to the available dataset.
 
-The EEG signals are transformed into two-dimensional representations suitable for CNN-based classification, including:
+## EEG Representations
 
+### Dataset Generation
 
+The `dipl_datasetovi.ipynb` notebook contains the preprocessing and dataset generation pipeline used to create the image-based datasets from the original EEG recordings.
 
-\- Power Spectral Density (PSD)
+The notebook generates the different representations used in the CNN experiments, including:
 
-\- Spectrograms
+- Power Spectral Density (PSD) representations
+- Spectrograms
+- EEG topographic scalp maps
+- Segmented versions of the corresponding representations
 
-\- Topographic scalp maps
+For segmented datasets, each participant's EEG recording is divided into five segments. The generated images are organized according to participant and representation, allowing the CNN notebooks to load the corresponding images for model training and evaluation.
 
+The original EEG recordings and generated image datasets are not included in the repository due to their size and data availability restrictions.
 
+### Power Spectral Density
 
-The project also investigates segmented EEG representations to increase the number of training samples while preserving subject-level separation between training and evaluation data.
+Welch's method is used to estimate the power spectral density of the EEG signals. PSD representations are used as inputs to the CNN models.
 
+### Spectrograms
 
+Time-frequency representations are generated using spectrograms, allowing both temporal and frequency information to be represented in a two-dimensional form.
 
-\## Model
+### Topographic Scalp Maps
 
+Spectral power is projected onto the scalp using EEG sensor locations. Five frequency bands are considered:
 
+- Delta: 0.5–4 Hz
+- Theta: 4–8 Hz
+- Alpha: 8–13 Hz
+- Beta: 13–30 Hz
+- Gamma: 30–45 Hz
+
+## Model
 
 A custom convolutional neural network is used for binary classification.
 
+The architecture consists of:
 
+- Three convolutional layers with progressively increasing feature dimensions
+- ReLU activations
+- Max-pooling
+- Adaptive/global feature aggregation
+- Fully connected classification layers
+- Dropout regularization
 
-The model consists of:
+For multi-image inputs, feature representations from five corresponding images are extracted and combined before the final classification stage.
 
+## Experimental Setup
 
+The experiments are implemented using Python and PyTorch.
 
-\- Three convolutional blocks
+The dataset is divided into training, validation, and test subsets while preserving subject-level separation. This prevents images originating from the same participant from being distributed across different subsets.
 
-\- ReLU activations
+The main training configuration includes:
 
-\- Max-pooling
+- Image size: depends on dataset
+- Batch size: 16 (8 in CNN_topomap_5seg)
+- Optimizer: Adam
+- Loss function: Cross-Entropy Loss
+- Training epochs: 30
+- Dropout: 0.5
 
-\- Adaptive/global feature aggregation
+## Results
 
-\- Fully connected classification layers
+The CNN models were evaluated using six different experimental setups combining three EEG representations with two segmentation strategies.
 
-\- Dropout regularization
+| EEG representation | Segmentation | Accuracy | F1-score |
+|---|---|---:|---:|
+| Power Spectral Density (PSD) | No | 67.86% | 66.67% |
+| Power Spectral Density (PSD) | 5 segments | 66.43% | 71.17% |
+| Spectrogram | No | 67.86% | 64.00% |
+| Spectrogram | 5 segments | 71.43% | 72.60% |
+| EEG topographic maps | No | 85.71% | 88.89% |
+| EEG topographic maps | 5 segments | **88.57%** | **89.47%** |
 
+The best performance was achieved using segmented EEG topographic maps, reaching an accuracy of **88.57%** and an F1-score of **89.47%**.
 
+The results indicate that spatial information represented through scalp topographies was particularly informative for the classification task. Segmenting the recordings into five temporal segments further improved the performance of the topographic representation.
 
-\## Technologies
+Detailed training results, evaluation metrics, and visualizations are available in the corresponding Jupyter notebooks.
 
-
-
-\- Python
-
-\- PyTorch
-
-\- MNE-Python
-
-\- SciPy
-
-\- NumPy
-
-\- Matplotlib
-
-\- scikit-learn
-
-
-
-\## Dataset
-
-
-
-The dataset contains EEG recordings from healthy participants and participants diagnosed with an affective disorder.
-
-
-
-The original dataset contains 140 participants, with 70 participants per class.
-
-
-
-The dataset itself is not publicly available so it isn't included in this repository.
-
-
-
-\## Results
-
-
-
-Results and visualizations are provided in the `results/` directory.
-
-
-
-\## Project Structure
-
-
+## Repository Structure
 
 ```text
-
 EEG-affective-disorder-classification/
-
-├── src/
-
+│
 ├── notebooks/
-
-├── results/
-
-├── docs/
-
+│   ├── dipl_datasetovi.ipynb
+│   ├── CNN_PS.ipynb
+│   ├── CNN_PS_5seg.ipynb
+│   ├── CNN_spektrogram.ipynb
+│   ├── CNN_spektrogram_5seg.ipynb
+│   ├── CNN_topomap.ipynb
+│   └── CNN_topomap_5seg.ipynb
+│
+├── data/
+│   └── README.md
+│
+├── .gitignore
 ├── README.md
+└── requirements.txt
 
-├── requirements.txt
+## Technologies
 
-└── .gitignore
+- Python
+- PyTorch
+- torchvision
+- MNE-Python
+- SciPy
+- NumPy
+- pandas
+- scikit-learn
+- Matplotlib
 
+## Reproducibility
+
+The notebooks contain the CNN training and evaluation workflow used in the experiments.
+
+Because the original EEG dataset and derived image datasets are not included in this repository, the data must be obtained separately and the corresponding files must be placed in a local data/ directory.
+
+The notebooks use relative paths to the project data/ directory rather than machine-specific absolute paths.
+
+## Academic Context
+
+This project was developed as part of a graduate thesis in Data Science at the University of Zagreb, Faculty of Electrical Engineering and Computing (FER).
+
+The project focuses on applying deep learning and image-based representations to EEG signal analysis for the classification of affective disorders.
